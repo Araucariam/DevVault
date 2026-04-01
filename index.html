@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#7c6aff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DevVault">
+    <meta name="description" content="Snippets, liens de veille et notes de dev">
+
+    <!-- CHEMINS RELATIFS — clé du fix -->
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" href="./icons/192.png">
+    <link rel="apple-touch-icon" href="./icons/192.png">
+
+    <title>DevVault</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+
+    <!-- CSS RELATIF -->
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <!-- OVERLAY -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo"><span class="material-symbols-outlined">rocket_launch</span></div>
+            <div class="sidebar-brand"><h1>DevVault</h1><span>Code · Liens · Notes</span></div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <div class="nav-item active" data-nav="snippets"><span class="material-symbols-outlined">data_object</span>Snippets<span class="nav-badge" id="badgeSnippets">0</span></div>
+            <div class="nav-item" data-nav="bookmarks"><span class="material-symbols-outlined">bookmark</span>Bookmarks<span class="nav-badge green" id="badgeBookmarks">0</span></div>
+            <div class="nav-item" data-nav="notes"><span class="material-symbols-outlined">edit_note</span>Notes<span class="nav-badge orange" id="badgeNotes">0</span></div>
+
+            <div class="nav-section">Filtres</div>
+            <div class="nav-item" data-nav="favorites"><span class="material-symbols-outlined">favorite</span>Favoris</div>
+            <div class="nav-item" data-nav="unread"><span class="material-symbols-outlined">visibility_off</span>Non lu</div>
+            <div class="nav-item" data-nav="priority"><span class="material-symbols-outlined">priority_high</span>Priorité haute</div>
+
+            <div class="nav-section">Thèmes</div>
+            <div class="nav-item" data-tag="ai"><span class="material-symbols-outlined">smart_toy</span>AI</div>
+            <div class="nav-item" data-tag="css"><span class="material-symbols-outlined">palette</span>CSS</div>
+            <div class="nav-item" data-tag="js"><span class="material-symbols-outlined">javascript</span>JavaScript</div>
+            <div class="nav-item" data-tag="rust"><span class="material-symbols-outlined">memory</span>Rust</div>
+            <div class="nav-item" data-tag="go"><span class="material-symbols-outlined">terminal</span>Go</div>
+            <div class="nav-item" data-tag="docker"><span class="material-symbols-outlined">deployed_code</span>Docker</div>
+
+            <div class="nav-section">Données</div>
+            <div class="nav-item" data-action="export"><span class="material-symbols-outlined">download</span>Exporter</div>
+            <div class="nav-item" data-action="import"><span class="material-symbols-outlined">upload</span>Importer</div>
+        </nav>
+        <div class="sidebar-footer"><div class="sidebar-footer-text">🌙 DevVault v2.1</div></div>
+    </aside>
+
+    <!-- HEADER -->
+    <header class="header">
+        <button class="header-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
+        <div class="header-title-wrap"><div class="header-title" id="headerTitle">Snippets</div></div>
+        <button class="header-btn ghost" id="searchBtn"><span class="material-symbols-outlined">search</span></button>
+    </header>
+
+    <!-- SEARCH -->
+    <div class="search-bar" id="searchBar">
+        <div class="search-wrap">
+            <span class="material-symbols-outlined">search</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Rechercher partout...">
+            <button class="search-clear-btn" id="searchClear"><span class="material-symbols-outlined">close</span></button>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <main class="main" id="main">
+
+        <!-- SNIPPETS PAGE -->
+        <div class="page active" id="pageSnippets">
+            <div class="welcome">
+                <p class="welcome-sub" id="greeting"></p>
+                <h2 class="welcome-title">Prêt à <em>coder</em> ? 🚀</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-box"><div class="stat-num purple" id="stSnippets">0</div><div class="stat-lbl">Snippets</div></div>
+                <div class="stat-box"><div class="stat-num blue" id="stBookmarks">0</div><div class="stat-lbl">Liens</div></div>
+                <div class="stat-box"><div class="stat-num green" id="stNotes">0</div><div class="stat-lbl">Notes</div></div>
+                <div class="stat-box"><div class="stat-num orange" id="stCopied">0</div><div class="stat-lbl">Copiés</div></div>
+            </div>
+            <div class="chips" id="snippetChips">
+                <div class="chip active" data-f="all"><span class="material-symbols-outlined">apps</span>Tous</div>
+                <div class="chip" data-f="html"><span class="material-symbols-outlined">code</span>HTML</div>
+                <div class="chip" data-f="css"><span class="material-symbols-outlined">palette</span>CSS</div>
+                <div class="chip" data-f="js"><span class="material-symbols-outlined">javascript</span>JS</div>
+                <div class="chip" data-f="full"><span class="material-symbols-outlined">layers</span>Full</div>
+                <div class="chip" data-f="docker"><span class="material-symbols-outlined">deployed_code</span>Docker</div>
+                <div class="chip" data-f="rust"><span class="material-symbols-outlined">memory</span>Rust</div>
+                <div class="chip" data-f="go"><span class="material-symbols-outlined">terminal</span>Go</div>
+            </div>
+            <div class="sec-header"><h2>📦 Bibliothèque</h2><span id="secSnippetCount"></span></div>
+            <div class="card-list" id="snippetList"></div>
+            <div class="empty-state" id="emptySnippets"><span class="material-symbols-outlined">code_off</span><h3>Aucun snippet</h3><p>Ajoutez votre premier snippet avec le bouton +</p></div>
+        </div>
+
+        <!-- BOOKMARKS PAGE -->
+        <div class="page" id="pageBookmarks">
+            <div class="welcome"><h2 class="welcome-title">🔗 Mes <em>liens</em></h2></div>
+            <div class="chips" id="bookmarkChips">
+                <div class="chip active" data-f="all"><span class="material-symbols-outlined">apps</span>Tous</div>
+                <div class="chip" data-f="ai"><span class="material-symbols-outlined">smart_toy</span>AI</div>
+                <div class="chip" data-f="css"><span class="material-symbols-outlined">palette</span>CSS</div>
+                <div class="chip" data-f="js"><span class="material-symbols-outlined">javascript</span>JS</div>
+                <div class="chip" data-f="rust"><span class="material-symbols-outlined">memory</span>Rust</div>
+                <div class="chip" data-f="go"><span class="material-symbols-outlined">terminal</span>Go</div>
+                <div class="chip" data-f="docker"><span class="material-symbols-outlined">deployed_code</span>Docker</div>
+                <div class="chip" data-f="unread"><span class="material-symbols-outlined">visibility_off</span>Non lu</div>
+            </div>
+            <div class="sec-header"><h2>📌 Veille tech</h2><span id="secBmCount"></span></div>
+            <div class="card-list" id="bookmarkList"></div>
+            <div class="empty-state" id="emptyBookmarks"><span class="material-symbols-outlined">bookmark_border</span><h3>Aucun lien</h3><p>Sauvegardez vos liens de veille tech</p></div>
+        </div>
+
+        <!-- NOTES PAGE -->
+        <div class="page" id="pageNotes">
+            <div class="welcome"><h2 class="welcome-title">📝 Mes <em>notes</em></h2></div>
+            <div class="chips" id="noteChips">
+                <div class="chip active" data-f="all"><span class="material-symbols-outlined">apps</span>Toutes</div>
+                <div class="chip" data-f="high"><span class="material-symbols-outlined">priority_high</span>Urgent</div>
+                <div class="chip" data-f="medium"><span class="material-symbols-outlined">remove</span>Medium</div>
+                <div class="chip" data-f="low"><span class="material-symbols-outlined">expand_more</span>Normal</div>
+            </div>
+            <div class="sec-header"><h2>💡 Mes idées</h2><span id="secNoteCount"></span></div>
+            <div class="card-list" id="noteList"></div>
+            <div class="empty-state" id="emptyNotes"><span class="material-symbols-outlined">note_stack</span><h3>Aucune note</h3><p>Notez vos idées et commandes à retenir</p></div>
+        </div>
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+        <button class="bottom-nav-item active" data-tab="snippets"><span class="material-symbols-outlined">data_object</span><span>Snippets</span></button>
+        <button class="bottom-nav-item" data-tab="bookmarks"><span class="material-symbols-outlined">bookmark</span><span>Liens</span><div class="bottom-nav-dot" id="dotBookmarks"></div></button>
+        <button class="bottom-nav-item" data-tab="notes"><span class="material-symbols-outlined">edit_note</span><span>Notes</span><div class="bottom-nav-dot" id="dotNotes"></div></button>
+    </nav>
+
+    <!-- FAB -->
+    <button class="fab" id="fab"><span class="material-symbols-outlined">add</span></button>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"><span class="material-symbols-outlined">check_circle</span><span id="toastMsg"></span></div>
+
+    <!-- INSTALL BANNER -->
+    <div class="install-banner" id="installBanner">
+        <div class="install-banner-text"><h4>Installer DevVault</h4><p>Accès depuis l'écran d'accueil</p></div>
+        <button class="install-btn" id="installBtn">Installer</button>
+        <button class="install-dismiss" id="installDismiss"><span class="material-symbols-outlined">close</span></button>
+    </div>
+
+    <!-- SNIPPET MODAL -->
+    <div class="modal-overlay" id="modalSnippet">
+        <div class="modal"><div class="modal-handle"></div>
+            <div class="modal-head"><h2>Nouveau snippet</h2><button class="modal-x" data-close="modalSnippet"><span class="material-symbols-outlined">close</span></button></div>
+            <div class="modal-body">
+                <div class="fg"><label>Nom</label><input type="text" id="inSnipName" placeholder="Ex: Flexbox center"></div>
+                <div class="fg"><label>Catégorie</label><select id="inSnipCat"><option value="html">HTML</option><option value="css">CSS</option><option value="js">JavaScript</option><option value="full">Full</option><option value="rust">Rust</option><option value="go">Go</option><option value="docker">Docker</option></select></div>
+                <div class="fg"><label>Code</label><textarea id="inSnipCode" placeholder="Collez votre code ici..."></textarea></div>
+                <button class="submit-btn" id="submitSnippet">Ajouter le snippet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOOKMARK MODAL -->
+    <div class="modal-overlay" id="modalBookmark">
+        <div class="modal"><div class="modal-handle"></div>
+            <div class="modal-head"><h2>Nouveau lien</h2><button class="modal-x" data-close="modalBookmark"><span class="material-symbols-outlined">close</span></button></div>
+            <div class="modal-body">
+                <div class="fg"><label>Titre</label><input type="text" id="inBmTitle" placeholder="Ex: GPT-5 annoncé"></div>
+                <div class="fg"><label>URL</label><input type="url" id="inBmUrl" placeholder="https://..."></div>
+                <div class="fg"><label>Description</label><input type="text" id="inBmDesc" placeholder="Optionnel..."></div>
+                <div class="form-row">
+                    <div class="fg"><label>Catégorie</label><select id="inBmCat"><option value="ai">AI</option><option value="css">CSS</option><option value="js">JavaScript</option><option value="rust">Rust</option><option value="go">Go</option><option value="docker">Docker</option><option value="other">Autre</option></select></div>
+                    <div class="fg"><label>Priorité</label><select id="inBmPrio"><option value="low">Normale</option><option value="medium">Moyenne</option><option value="high">Haute</option></select></div>
+                </div>
+                <div class="fg"><label>Tags</label><div class="tags-input-wrap" id="bmTagsWrap"><input type="text" class="tags-text-input" id="inBmTags" placeholder="Tag + Entrée"></div></div>
+                <button class="submit-btn" id="submitBookmark">Sauvegarder le lien</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTE MODAL -->
+    <div class="modal-overlay" id="modalNote">
+        <div class="modal"><div class="modal-handle"></div>
+            <div class="modal-head"><h2>Nouvelle note</h2><button class="modal-x" data-close="modalNote"><span class="material-symbols-outlined">close</span></button></div>
+            <div class="modal-body">
+                <div class="fg"><label>Titre</label><input type="text" id="inNoteTitle" placeholder="Ex: Commande Docker utile"></div>
+                <div class="fg"><label>Contenu</label><textarea id="inNoteBody" class="note-text" placeholder="Écrivez votre note..."></textarea></div>
+                <div class="form-row"><div class="fg"><label>Priorité</label><select id="inNotePrio"><option value="low">Normale</option><option value="medium">Moyenne</option><option value="high">Haute</option></select></div></div>
+                <div class="fg"><label>Tags</label><div class="tags-input-wrap" id="noteTagsWrap"><input type="text" class="tags-text-input" id="inNoteTags" placeholder="Tag + Entrée"></div></div>
+                <button class="submit-btn" id="submitNote">Sauvegarder la note</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRM -->
+    <div class="confirm-overlay" id="confirmDialog">
+        <div class="confirm-box">
+            <h3 id="confirmTitle">Supprimer ?</h3>
+            <p id="confirmMsg">Irréversible.</p>
+            <div class="confirm-btns">
+                <button class="confirm-cancel" id="confirmCancel">Annuler</button>
+                <button class="confirm-ok" id="confirmOk">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="importFile" accept=".json" style="display:none">
+
+    <!-- JS RELATIF -->
+    <script type="module" src="./js/app.js"></script>
+</body>
+</html>
