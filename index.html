@@ -47,6 +47,8 @@
             <div class="nav-item" data-nav="unread"><span class="material-symbols-outlined">visibility_off</span>Non lu</div>
             <div class="nav-item" data-nav="priority"><span class="material-symbols-outlined">priority_high</span>Priorité haute</div>
 
+            <div class="nav-item" data-nav="history"><span class="material-symbols-outlined">history</span>Historique copies</div>
+            
             <div class="nav-section">Thèmes</div>
             <div class="nav-item" data-tag="ai"><span class="material-symbols-outlined">smart_toy</span>AI</div>
             <div class="nav-item" data-tag="css"><span class="material-symbols-outlined">palette</span>CSS</div>
@@ -58,6 +60,12 @@
             <div class="nav-section">Données</div>
             <div class="nav-item" data-action="export"><span class="material-symbols-outlined">download</span>Exporter</div>
             <div class="nav-item" data-action="import"><span class="material-symbols-outlined">upload</span>Importer</div>
+            <div class="nav-section">Apparence</div>
+            <div class="theme-toggle-row" id="themeToggle">
+                <span class="material-symbols-outlined" id="themeIcon">dark_mode</span>
+                    Mode clair
+                <div class="theme-switch" id="themeSwitch"></div>
+            </div>
         </nav>
         <div class="sidebar-footer"><div class="sidebar-footer-text">🌙 DevVault v2.1</div></div>
     </aside>
@@ -66,6 +74,7 @@
     <header class="header">
         <button class="header-btn" id="menuBtn"><span class="material-symbols-outlined">menu</span></button>
         <div class="header-title-wrap"><div class="header-title" id="headerTitle">Snippets</div></div>
+        <button class="header-btn ghost" id="sortBtn"><span class="material-symbols-outlined">sort</span></button>
         <button class="header-btn ghost" id="searchBtn"><span class="material-symbols-outlined">search</span></button>
     </header>
 
@@ -214,6 +223,46 @@
             <div class="confirm-btns">
                 <button class="confirm-cancel" id="confirmCancel">Annuler</button>
                 <button class="confirm-ok" id="confirmOk">Supprimer</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SORT MENU -->
+    <div class="sort-menu" id="sortMenu">
+        <button class="sort-option active" data-sort="default"><span class="material-symbols-outlined">auto_awesome</span>Par défaut</button>
+        <button class="sort-option" data-sort="name-asc"><span class="material-symbols-outlined">sort_by_alpha</span>Nom A→Z</button>
+        <button class="sort-option" data-sort="name-desc"><span class="material-symbols-outlined">sort_by_alpha</span>Nom Z→A</button>
+        <button class="sort-option" data-sort="date-new"><span class="material-symbols-outlined">schedule</span>Plus récent</button>
+        <button class="sort-option" data-sort="date-old"><span class="material-symbols-outlined">history</span>Plus ancien</button>
+        <button class="sort-option" data-sort="priority"><span class="material-symbols-outlined">priority_high</span>Priorité</button>
+    </div>
+
+    <!-- QR MODAL -->
+    <div class="modal-overlay" id="qrModal">
+        <div class="modal"><div class="modal-handle"></div>
+            <div class="modal-head"><h2>QR Code</h2><button class="modal-x" data-close="qrModal"><span class="material-symbols-outlined">close</span></button></div>
+            <div class="modal-body">
+                <div class="qr-container">
+                    <h3 id="qrTitle" style="font-size:15px;text-align:center"></h3>
+                    <div class="qr-code"><img id="qrImage" alt="QR Code"></div>
+                    <p class="qr-url" id="qrUrl"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HISTORY MODAL -->
+    <div class="modal-overlay" id="historyModal">
+        <div class="modal"><div class="modal-handle"></div>
+            <div class="modal-head">
+                <h2>📋 Historique copies</h2>
+                <div style="display:flex;gap:6px">
+                    <button class="modal-x" id="clearHistory" style="background:var(--red-glow);color:var(--red)" title="Vider"><span class="material-symbols-outlined">delete_sweep</span></button>
+                    <button class="modal-x" data-close="historyModal"><span class="material-symbols-outlined">close</span></button>
+                </div>
+            </div>
+            <div class="modal-body" style="padding:0">
+                <div class="history-list" id="historyList"></div>
             </div>
         </div>
     </div>
